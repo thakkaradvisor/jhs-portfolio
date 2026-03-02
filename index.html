@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JHS Analytics Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{--bg:#F7F6F3;--white:#fff;--text:#1A1A1A;--muted:#6B6B6B;--border:#E5E3DE;--accent:#1E6FFF}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+  .page-header{padding:48px 48px 0;max-width:1200px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px}
+  .eyebrow{font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+  h1{font-family:'Playfair Display',serif;font-size:2.2rem;line-height:1.2}
+  .count-badge{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:6px 16px;font-size:.82rem;color:var(--muted);font-weight:500}
+  .count-badge span{color:var(--accent);font-weight:700}
+  .filters-bar{max-width:1200px;margin:28px auto 0;padding:0 48px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .fl{font-size:.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-right:4px}
+  .fb{padding:6px 16px;border-radius:20px;border:1px solid var(--border);background:var(--white);color:var(--muted);font-size:.8rem;font-weight:500;cursor:pointer;transition:all .15s;font-family:inherit}
+  .fb:hover{border-color:#bbb;color:var(--text)}
+  .fb.active{background:var(--text);color:#fff;border-color:var(--text)}
+  .grid-wrapper{max-width:1200px;margin:32px auto 80px;padding:0 48px}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .card{background:var(--white);border-radius:18px;border:1px solid var(--border);overflow:hidden;display:flex;flex-direction:column;transition:transform .22s,box-shadow .22s;cursor:pointer;animation:fi .4s ease both}
+  .card:hover{transform:translateY(-5px);box-shadow:0 16px 48px rgba(0,0,0,.09)}
+  @keyframes fi{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  .card-img{position:relative;height:200px;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .card-img img{width:100%;height:100%;object-fit:cover;transition:transform .35s}
+  .card:hover .card-img img{transform:scale(1.04)}
+  .card-img img.err{display:none}
+  .placeholder{font-size:3.5rem;opacity:.4;position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+  .pill{position:absolute;top:14px;left:14px;z-index:2;padding:4px 12px;border-radius:20px;font-size:.68rem;font-weight:700;color:#fff}
+  .card-body{padding:20px 20px 14px;flex:1;display:flex;flex-direction:column;gap:8px}
+  .card-title{font-size:1rem;font-weight:600;line-height:1.35}
+  .card-desc{font-size:.82rem;color:var(--muted);line-height:1.65;flex:1}
+  .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+  .tag{padding:3px 10px;border-radius:10px;font-size:.68rem;font-weight:600;background:var(--bg);color:var(--muted);border:1px solid var(--border)}
+  .card-footer{padding:12px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+  .vbtn{font-size:.78rem;font-weight:600;color:var(--accent);display:flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-family:inherit;padding:0}
+  .vbtn .arr{transition:transform .2s}
+  .card:hover .arr{transform:translateX(4px)}
+  /* modal */
+  .ov{display:none;position:fixed;inset:0;z-index:999;background:rgba(15,15,15,.55);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px}
+  .ov.open{display:flex}
+  .modal{background:var(--white);border-radius:22px;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;box-shadow:0 32px 80px rgba(0,0,0,.22);animation:mi .25s ease}
+  @keyframes mi{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+  .mimg{width:100%;height:240px;object-fit:cover;display:block}
+  .mph{height:200px;display:flex;align-items:center;justify-content:center;font-size:4rem}
+  .mc{padding:28px}
+  .mh{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px}
+  .mt{font-family:'Playfair Display',serif;font-size:1.5rem;line-height:1.25;flex:1}
+  .mcl{width:32px;height:32px;border-radius:50%;border:1px solid var(--border);background:var(--bg);cursor:pointer;font-size:1rem;color:var(--muted);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .md{font-size:.88rem;color:var(--muted);line-height:1.75;margin-bottom:22px}
+  .ms{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:10px}
+  .fl-list{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:22px}
+  .fl-list li{display:flex;gap:10px;font-size:.86rem;align-items:flex-start}
+  .mtools{display:flex;gap:8px;flex-wrap:wrap}
+  .mtool{padding:5px 14px;border-radius:20px;font-size:.78rem;font-weight:600}
+  /* edit fab */
+  .fab{position:fixed;bottom:28px;right:28px;z-index:500;background:var(--text);color:#fff;border:none;border-radius:50px;padding:12px 22px;font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+  .ep-ov{display:none;position:fixed;inset:0;z-index:800;background:rgba(0,0,0,.4)}
+  .ep-ov.open{display:block}
+  .ep{position:fixed;right:0;top:0;bottom:0;z-index:900;width:520px;max-width:95vw;background:var(--white);box-shadow:-8px 0 40px rgba(0,0,0,.15);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s ease}
+  .ep.open{transform:translateX(0)}
+  .eph{padding:24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+  .eph h3{font-family:'Playfair Display',serif;font-size:1.2rem}
+  .epcl{background:var(--bg);border:1px solid var(--border);border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center}
+  .epb{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:14px}
+  .ep-note{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:12px 14px;font-size:.8rem;color:#92400e;line-height:1.5}
+  .ep-list{display:flex;flex-direction:column;gap:8px}
+  .ep-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:border-color .15s}
+  .ep-item:hover{border-color:var(--accent)}
+  .epa{display:flex;gap:10px;padding:16px 24px;border-top:1px solid var(--border)}
+  .ep-save{flex:1;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:11px;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer}
+  .ep-cancel{background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:11px 18px;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer}
+  .ep-add{background:var(--bg);color:var(--text);border:1px dashed var(--border);border-radius:10px;padding:11px;font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer;text-align:center;width:100%}
+  .ep-add:hover{border-color:var(--accent);color:var(--accent)}
+  .ep-del{background:#fff0f0;color:#dc2626;border:1px solid #fecaca;border-radius:10px;padding:11px 16px;font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer}
+  .ep-f label{display:block;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:5px}
+  .ep-f input,.ep-f textarea,.ep-f select{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:.85rem;background:var(--bg);color:var(--text);outline:none}
+  .ep-f input:focus,.ep-f textarea:focus{border-color:var(--accent);background:#fff}
+  .ep-f textarea{resize:vertical;min-height:70px}
+  .ep-f small{display:block;font-size:.72rem;color:var(--muted);margin-top:4px}
+  @media(max-width:960px){.grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:600px){.page-header,.filters-bar,.grid-wrapper{padding-left:20px;padding-right:20px}.grid{grid-template-columns:1fr}h1{font-size:1.7rem}}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div>
+    <div class="eyebrow">⚡ Power BI Analytics</div>
+    <h1>Featured Projects</h1>
+  </div>
+  <div class="count-badge">Showing <span id="cs">0</span> of <span id="ct">0</span> projects</div>
+</div>
+
+<div class="filters-bar">
+  <span class="fl">Filter:</span>
+  <button class="fb active" onclick="filter('All',this)">All</button>
+</div>
+
+<div class="grid-wrapper"><div class="grid" id="grid"></div></div>
+
+<div class="ov" id="ov" onclick="closeMod(event)">
+  <div class="modal">
+    <div id="mimg"></div>
+    <div class="mc">
+      <div class="mh"><h2 class="mt" id="mtitle"></h2><button class="mcl" onclick="closeMod()">✕</button></div>
+      <p class="md" id="mdesc"></p>
+      <div class="ms">Key Features</div>
+      <ul class="fl-list" id="mfeats"></ul>
+      <div class="ms">Tools & Technologies</div>
+      <div class="mtools" id="mtools"></div>
+    </div>
+  </div>
+</div>
+
+<button class="fab" onclick="openEP()">✏️ Edit Projects</button>
+<div class="ep-ov" id="epov" onclick="closeEP()"></div>
+<div class="ep" id="ep">
+  <div class="eph"><h3 id="epT">Edit Projects</h3><button class="epcl" onclick="closeEP()">✕</button></div>
+  <div class="epb" id="epB"></div>
+  <div class="epa" id="epA"></div>
+</div>
+
+<script>
+const IC = {
+  'Finance':        {bg:'#1A5C3A',lt:'#E8F5EE',tx:'#1A5C3A',ic:'💰'},
+  'HR':             {bg:'#7C3AED',lt:'#F3EEFF',tx:'#7C3AED',ic:'👥'},
+  'Supply Chain':   {bg:'#B45309',lt:'#FEF3E2',tx:'#B45309',ic:'🚛'},
+  'Share Market':   {bg:'#1D4ED8',lt:'#EFF4FF',tx:'#1D4ED8',ic:'📈'},
+  'Sales':          {bg:'#BE185D',lt:'#FDF0F6',tx:'#BE185D',ic:'🛒'},
+  'Operations':     {bg:'#0F766E',lt:'#EDFAF8',tx:'#0F766E',ic:'⚙️'},
+  'Procurement':    {bg:'#92400E',lt:'#FEF3E2',tx:'#92400E',ic:'📦'},
+  'Reconciliation': {bg:'#374151',lt:'#F3F4F6',tx:'#374151',ic:'🔁'},
+};
+function gc(ind){
+  for(const[k,v]of Object.entries(IC)) if(ind&&ind.toLowerCase().includes(k.toLowerCase())) return v;
+  return{bg:'#1E6FFF',lt:'#EEF3FF',tx:'#1E6FFF',ic:'📊'};
+}
+
+let DATA=[
+  {title:"P&L & Financial Close Dashboard",industry:"Finance",description:"Real-time profit & loss visibility with budget vs. actual tracking and multi-entity consolidation across business units.",features:["Replaced 40+ manual Excel reports","Live financial close tracking","Multi-entity consolidation","Drill-down by department & cost center","Budget vs. actual with variance analysis"],tools:["Power BI","DAX","SQL Server"],imageUrl:""},
+  {title:"Workforce & Attrition Analytics",industry:"HR",description:"Unified HR intelligence covering headcount trends, attrition drivers, hiring pipeline, and payroll cost in one view.",features:["Attrition trend analysis by department","Headcount vs budget tracking","Hiring funnel & time-to-hire KPIs","Payroll cost breakdown","Employee tenure & diversity metrics"],tools:["Power BI","HR System","Excel","SharePoint"],imageUrl:""},
+  {title:"Supply Chain & Logistics Tracker",industry:"Supply Chain",description:"End-to-end supply chain visibility from purchase order to delivery with inventory health and demand forecasting from ERP.",features:["Inventory aging & stock alerts","Delivery performance (DIFOT)","Demand vs supply planning","Vendor lead time analysis","Route & freight cost optimization"],tools:["Power BI","ERP Integration","Python","SQL"],imageUrl:""},
+  {title:"Portfolio Monitoring Dashboard",industry:"Share Market",description:"Live-connected portfolio monitoring dashboard covering stock performance, sector allocation, and risk exposure with real-time market data.",features:["Real-time stock price feeds via API","Portfolio vs benchmark tracking","Sector & geography allocation","Risk and volatility metrics","Gain/Loss reporting"],tools:["Power BI","REST API","Azure","SQL"],imageUrl:""},
+  {title:"Sales Performance & Pipeline",industry:"Sales",description:"360 degree sales analytics platform tracking revenue, rep performance, pipeline health, and target attainment across regions.",features:["Revenue vs target by region & rep","Pipeline stage & conversion rates","Product & customer segment analysis","Rolling forecasts & trend analysis","Rep leaderboard & incentive tracking"],tools:["Power BI","CRM","SQL","Excel"],imageUrl:""},
+  {title:"Operations Efficiency & OEE",industry:"Operations",description:"Plant and operations efficiency dashboard tracking OEE, downtime, throughput, and shift-level performance to support continuous improvement.",features:["OEE and machine utilization tracking","Downtime root-cause analysis","Shift & production line performance","Production vs capacity planning","Quality defect rate monitoring"],tools:["Power BI","SCADA","SQL","ERP"],imageUrl:""},
+  {title:"Procurement Spend & Planning",industry:"Procurement",description:"Spend analytics and planning dashboard covering vendor performance, PO cycle times, contract compliance, and demand-supply planning from ERP.",features:["Spend analysis by category & vendor","PO approval & cycle time KPIs","Vendor scorecard & compliance","Demand & capacity planning","Contract expiry alerts"],tools:["Power BI","ERP (SAP)","Excel","SQL"],imageUrl:""},
+  {title:"Reconciliation & Audit Tracker",industry:"Reconciliation",description:"Automated reconciliation tracker that flags discrepancies, tracks resolution status, and produces audit-ready reports.",features:["Automated discrepancy detection","Resolution status & aging tracker","Bank-to-book reconciliation","Audit trail and exception reports","Inter-company matching workflows"],tools:["Power BI","SQL","Excel","SharePoint"],imageUrl:""}
+];
+
+let AF='All',EI=null;
+
+function buildFilters(){
+  const bar=document.querySelector('.filters-bar');
+  bar.querySelectorAll('.fb:not(:first-child)').forEach(b=>b.remove());
+  [...new Set(DATA.map(p=>p.industry))].forEach(ind=>{
+    const b=document.createElement('button');
+    b.className='fb';b.textContent=ind;
+    b.onclick=()=>filter(ind,b);bar.appendChild(b);
+  });
+}
+
+function filter(v,btn){
+  AF=v;
+  document.querySelectorAll('.fb').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  render(v==='All'?DATA:DATA.filter(p=>p.industry===v));
+}
+
+function render(list){
+  document.getElementById('ct').textContent=DATA.length;
+  document.getElementById('cs').textContent=list.length;
+  const g=document.getElementById('grid');
+  if(!list.length){g.innerHTML='<div style="grid-column:span 3;text-align:center;padding:80px;color:var(--muted)">No projects found.</div>';return;}
+  g.innerHTML=list.map((p,i)=>{
+    const ri=DATA.indexOf(p),c=gc(p.industry);
+    const hi=p.imageUrl&&p.imageUrl.trim()!=='';
+    const img=hi
+      ?`<img src="${p.imageUrl}" onerror="this.classList.add('err');this.nextElementSibling.style.display='flex'"><div class="placeholder" style="display:none">${c.ic}</div>`
+      :`<div class="placeholder">${c.ic}</div>`;
+    const tt=p.tools.slice(0,3).map(t=>`<span class="tag">${t}</span>`).join('');
+    const ex=p.tools.length>3?`<span class="tag">+${p.tools.length-3}</span>`:'';
+    return`<div class="card" style="animation-delay:${i*.06}s" onclick="openMod(${ri})">
+      <div class="card-img" style="background:${c.bg}22">${img}<span class="pill" style="background:${c.bg}">${p.industry}</span></div>
+      <div class="card-body"><div class="card-title">${p.title}</div><div class="card-desc">${p.description}</div><div class="tags">${tt}${ex}</div></div>
+      <div class="card-footer"><button class="vbtn" onclick="event.stopPropagation();openMod(${ri})">View Details <span class="arr">→</span></button></div>
+    </div>`;
+  }).join('');
+}
+
+function refresh(){buildFilters();render(AF==='All'?DATA:DATA.filter(p=>p.industry===AF));}
+
+function openMod(i){
+  const p=DATA[i],c=gc(p.industry);
+  const hi=p.imageUrl&&p.imageUrl.trim()!=='';
+  document.getElementById('mimg').innerHTML=hi
+    ?`<img class="mimg" src="${p.imageUrl}" onerror="this.style.display='none'">`
+    :`<div class="mph" style="background:${c.lt}">${c.ic}</div>`;
+  document.getElementById('mtitle').textContent=p.title;
+  document.getElementById('mdesc').textContent=p.description;
+  document.getElementById('mfeats').innerHTML=p.features.map(f=>`<li><span style="color:${c.tx};font-weight:700;margin-right:6px">✓</span>${f}</li>`).join('');
+  document.getElementById('mtools').innerHTML=p.tools.map(t=>`<span class="mtool" style="background:${c.lt};color:${c.tx}">${t}</span>`).join('');
+  document.getElementById('ov').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeMod(e){
+  if(e&&e.type==='click'&&e.target.id!=='ov')return;
+  document.getElementById('ov').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function openEP(){showList();document.getElementById('ep').classList.add('open');document.getElementById('epov').classList.add('open');}
+function closeEP(){document.getElementById('ep').classList.remove('open');document.getElementById('epov').classList.remove('open');EI=null;}
+
+function showList(){
+  document.getElementById('epT').textContent='Edit Projects';
+  document.getElementById('epB').innerHTML=`
+    <div class="ep-note">💡 Click any project to edit it, or add a new one below.</div>
+    <div class="ep-list">${DATA.map((p,i)=>{const c=gc(p.industry);return`<div class="ep-item" onclick="showForm(${i})">
+      <div><div style="font-size:.85rem;font-weight:600">${p.title}</div><div style="font-size:.72rem;color:${c.tx}">${p.industry}</div></div>
+      <span style="font-size:.75rem;color:var(--accent);font-weight:600">Edit →</span>
+    </div>`;}).join('')}</div>
+    <button class="ep-add" onclick="showForm(-1)">+ Add New Project</button>`;
+  document.getElementById('epA').innerHTML='';
+}
+
+function showForm(i){
+  EI=i;
+  const p=i===-1?{title:'',industry:'Finance',description:'',features:[],tools:[],imageUrl:''}:DATA[i];
+  document.getElementById('epT').textContent=i===-1?'Add New Project':'Edit Project';
+  document.getElementById('epB').innerHTML=`<div class="ep-f" style="display:flex;flex-direction:column;gap:14px">
+    <div class="ep-f"><label>Title</label><input id="ef-t" value="${esc(p.title)}" placeholder="Dashboard name"></div>
+    <div class="ep-f"><label>Industry</label><select id="ef-i">${['Finance','HR','Supply Chain','Share Market','Sales','Operations','Procurement','Reconciliation'].map(x=>`<option${p.industry===x?' selected':''}>${x}</option>`).join('')}</select></div>
+    <div class="ep-f"><label>Description</label><textarea id="ef-d" rows="3">${esc(p.description)}</textarea></div>
+    <div class="ep-f"><label>Key Features</label><textarea id="ef-f" rows="5">${p.features.join('\n')}</textarea><small>One feature per line</small></div>
+    <div class="ep-f"><label>Tools</label><input id="ef-to" value="${p.tools.join(', ')}" placeholder="Power BI, SQL, DAX"><small>Separate with commas</small></div>
+    <div class="ep-f"><label>Image URL</label><input id="ef-img" value="${esc(p.imageUrl)}" placeholder="https://i.imgur.com/your-screenshot.png"><small>Paste a direct screenshot link. Leave blank to show icon.</small></div>
+  </div>`;
+  document.getElementById('epA').innerHTML=`
+    <button class="ep-cancel" onclick="showList()">← Back</button>
+    ${i!==-1?`<button class="ep-del" onclick="delP(${i})">Delete</button>`:''}
+    <button class="ep-save" onclick="saveP()">Save</button>`;
+}
+
+function esc(s){return(s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+
+function saveP(){
+  const p={
+    title:document.getElementById('ef-t').value.trim(),
+    industry:document.getElementById('ef-i').value,
+    description:document.getElementById('ef-d').value.trim(),
+    features:document.getElementById('ef-f').value.split('\n').map(f=>f.trim()).filter(Boolean),
+    tools:document.getElementById('ef-to').value.split(',').map(t=>t.trim()).filter(Boolean),
+    imageUrl:document.getElementById('ef-img').value.trim(),
+  };
+  if(!p.title){alert('Please enter a title.');return;}
+  if(EI===-1)DATA.push(p); else DATA[EI]=p;
+  refresh();showList();
+}
+
+function delP(i){
+  if(!confirm('Delete this project?'))return;
+  DATA.splice(i,1);refresh();showList();
+}
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeMod();closeEP();}});
+refresh();
+</script>
+</body>
+</html>
