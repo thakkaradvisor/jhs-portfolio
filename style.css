@@ -13,9 +13,9 @@
     --text: #111827;
     --muted: #6B7280;
     --border: #E5E7EB;
-    --accent: #1E6FFF; 
+    /* Changed accent from Blue to a Sophisticated Dark Grey */
+    --accent: #374151; 
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 20px -1px rgba(0, 0, 0, 0.08);
 }
 
 body {
@@ -36,6 +36,15 @@ body {
     margin-bottom: 50px; 
 }
 
+.eyebrow {
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted); /* Neutralized */
+    margin-bottom: 12px;
+}
+
 .title {
     font-family: 'Playfair Display', serif;
     font-size: 3rem;
@@ -52,11 +61,10 @@ body {
     gap: 12px;
     flex-wrap: wrap;
     margin: 0 auto 60px auto;
-    max-width: 1000px;
 }
 
 .fb {
-    padding: 12px 24px;
+    padding: 10px 22px;
     border-radius: 50px;
     border: 1px solid var(--border);
     background: var(--white);
@@ -64,14 +72,14 @@ body {
     font-size: .875rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
 }
 
+/* Filter Hover: Soft Grey */
 .fb:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    transform: translateY(-2px);
+    border-color: #9CA3AF;
+    color: #111;
+    background: #F9FAFB;
 }
 
 .fb.active {
@@ -80,7 +88,7 @@ body {
     border-color: var(--text);
 }
 
-/* 4. THE GRID - Locked Row Alignment */
+/* 4. THE GRID */
 .portfolio-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -98,10 +106,9 @@ body {
     display: flex;
     flex-direction: column;
     
-    /* UNIFORMITY: Force every card to be identical */
     width: 100%;
     max-width: 380px; 
-    height: 450px; 
+    height: 450px; /* Locked Height */
     
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     box-shadow: var(--shadow-sm);
@@ -109,13 +116,14 @@ body {
     position: relative;
 }
 
+/* NEW HOVER STATE: Deep Grey & Lift */
 .portfolio-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    border-color: var(--accent);
+    box-shadow: 0 20px 30px rgba(0, 0, 0, 0.08);
+    border-color: #9CA3AF; /* Subtle Grey Border */
 }
 
-/* 6. IMAGE AREA - Fixed Height */
+/* 6. IMAGE AREA */
 .card-header {
     height: 180px;
     width: 100%;
@@ -125,21 +133,16 @@ body {
     flex-shrink: 0;
 }
 
-.image-container { 
-    width: 100%; 
-    height: 100%; 
-}
-
 .image-container img {
     width: 100%;
     height: 100%;
     object-fit: cover; 
     display: block;
-    transition: transform .8s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: transform .8s ease;
 }
 
 .portfolio-card:hover .image-container img { 
-    transform: scale(1.08); 
+    transform: scale(1.05); 
 }
 
 .industry-badge {
@@ -148,16 +151,15 @@ body {
     left: 16px;
     color: white;
     padding: 6px 14px;
-    border-radius: 12px;
+    border-radius: 10px;
     font-size: .65rem;
     font-weight: 700;
     z-index: 10;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-/* 7. CONTENT AREA - Text Clamping */
+/* 7. CONTENT AREA */
 .portfolio-info {
     padding: 24px;
     display: flex;
@@ -172,8 +174,6 @@ body {
     color: #111;
     margin-bottom: 10px;
     line-height: 1.3;
-    
-    /* Limit title to 2 lines */
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -185,8 +185,6 @@ body {
     color: var(--muted);
     line-height: 1.6;
     margin-bottom: 20px;
-    
-    /* Limit description to 3 lines */
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
@@ -198,20 +196,27 @@ body {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
-    margin-top: auto; /* Always stays at the bottom of the 450px card */
+    margin-top: auto; 
 }
 
 .feature-tags span {
     background: #F3F4F6;
-    border: 1px solid #E5E7EB;
     color: #4B5563;
     font-weight: 600;
-    padding: 4px 12px;
-    border-radius: 8px;
+    padding: 4px 10px;
+    border-radius: 6px;
     font-size: .7rem;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
 }
 
-/* 9. REMOVED ELEMENTS (Cleanup) */
+/* Tag Hover Effect */
+.portfolio-card:hover .feature-tags span {
+    background: #fff;
+    border-color: #D1D5DB;
+}
+
+/* 9. CLEANUP */
 .ov, .view-link, hr { 
     display: none !important; 
 }
@@ -220,9 +225,4 @@ body {
 @keyframes fadeInUp {
     from { transform: translateY(20px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
-}
-
-@media (max-width: 768px) {
-    .title { font-size: 2.2rem; }
-    .portfolio-grid { grid-template-columns: 1fr; }
 }
