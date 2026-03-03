@@ -11,8 +11,8 @@
 
     <div class="container">
         <div class="page-header">
-            <div class="eyebrow">⚡ Power BI Analytics</div>
-            <h1 class="title">Featured Projects</h1>
+            <div class="eyebrow">⚡ JHS Analytics</div>
+            <h1 class="title">Explore Dashboards</h1>
             <div style="text-align:center; margin-bottom: 20px;">
                 <span class="count-badge">Showing <span id="cs">0</span> of <span id="ct">0</span> projects</span>
             </div>
@@ -28,104 +28,112 @@
     </div>
 
     <script>
-        // 1. Industry Configuration
-        const IC = {
-            'Finance':       {bg:'#800000', lt:'#E8F5EE', tx:'#1A5C3A', ic:'💰'},
-            'HR':            {bg:'#800000', lt:'#F3EEFF', tx:'#7C3AED', ic:'👥'},
-            'Supply Chain':  {bg:'#800000', lt:'#FEF3E2', tx:'#B45309', ic:'🚛'},
-            'Share Market':  {bg:'#800000', lt:'#EFF4FF', tx:'#1D4ED8', ic:'📈'},
-            'Sales':         {bg:'#800000', lt:'#FDF0F6', tx:'#BE185D', ic:'🛒'},
-            'Operations':    {bg:'#800000', lt:'#EDFAF8', tx:'#0F766E', ic:'⚙️'},
-            'Procurement':   {bg:'#800000', lt:'#FEF3E2', tx:'#92400E', ic:'📦'},
-            'Reconciliation':{bg:'#800000', lt:'#F3F4F6', tx:'#374151', ic:'🔁'},
-        };
+    // 1. Configuration
+    const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqp9gms0RGShThKaCK-raQCbciyNSTi94uSthfKyZXeir3TZE9q4bStringXjp9i0S0vmZSkaiTdRkSEx9Xs/pub?gid=0&single=true&output=csv";
+    let DATA = [];
+    let AF = 'All';
 
-        const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNa65Z_LhorOp6gdsFWQ4oIJb6MoyFyFAoEv92doWMHpRkrCZIbB4tGCHamC2LMMMV0gfze9EYOR2G/pub?gid=0&single=true&output=csv";
-        let DATA = [];
-        let AF = 'All';
+    // 2. Data Loading
+    async function loadDataFromSheet() {
+        try {
+            const response = await fetch(sheetUrl);
+            const csvData = await response.text();
+            const rows = csvData.split('\n').slice(1); 
 
-        // 2. Data Loading
-        async function loadDataFromSheet() {
-            try {
-                const response = await fetch(sheetUrl);
-                const csvData = await response.text();
-                const rows = csvData.split('\n').slice(1); 
+            DATA = rows.map(row => {
+                // Regex to handle commas inside quoted descriptions
+                const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                
+                // Maps to your 5 columns: Title(0), Industry(1), Description(2), DashURL(3), ImageURL(4)
+                if (cols.length < 5) return null;
 
-                DATA = rows.map(row => {
-                    const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                    if (cols.length < 6) return null;
+                return {
+                    title: cols[0]?.replace(/"/g, '').trim(),
+                    industry: cols[1]?.replace(/"/g, '').trim(),
+                    description: cols[2]?.replace(/"/g, '').trim(),
+                    dashboardUrl: cols[3]?.replace(/"/g, '').trim(), // Column D
+                    imageUrl: cols[4]?.replace(/"/g, '').trim()    // Column E
+                };
+            }).filter(p => p !== null && p.title !== "");
 
-                    return {
-                        title: cols[0].replace(/"/g, '').trim(),
-                        industry: cols[1].replace(/"/g, '').trim(),
-                        description: cols[2].replace(/"/g, '').trim(),
-                        features: cols[3].replace(/"/g, '').split('|').map(f => f.trim()),
-                        dashboardUrl: cols[4].replace(/"/g, '').trim(),
-                        imageUrl: cols[5].replace(/"/g, '').trim()
-                    };
-                }).filter(p => p !== null);
-
-                refresh();
-            } catch (error) {
-                console.error("Error loading sheet:", error);
-            }
+            refresh();
+        } catch (error) {
+            console.error("Fetch Error:", error);
+            document.getElementById('portfolio-grid').innerHTML = 
+                '<div style="grid-column:1/-1;text-align:center;padding:100px;">Error loading data. Please check your connection.</div>';
         }
+    }
 
-        // 3. Helpers
-        function gc(ind) {
-            for (const [k, v] of Object.entries(IC)) 
-                if (ind && ind.toLowerCase().includes(k.toLowerCase())) return v;
-            return {bg:'#1E6FFF', lt:'#EEF3FF', tx:'#1E6FFF', ic:'📊'};
-        }
+    // 3. Filtering & Helpers
+    function buildFilters() {
+        const bar = document.getElementById('filters-container');
+        if (!bar) return;
 
-        function buildFilters() {
-            const bar = document.getElementById('filters-container');
-            bar.querySelectorAll('.fb:not(:nth-child(2))').forEach(b => b.remove());
-            
-            [...new Set(DATA.map(p => p.industry))].forEach(ind => {
+        // Reset bar with 'All' button
+        bar.innerHTML = '<span class="fl">Filter:</span><button class="fb active" onclick="filter(\'All\', this)">All</button>';
+        
+        // Get unique industries and create buttons
+        [...new Set(DATA.map(p => p.industry))].forEach(ind => {
+            if(ind) {
                 const b = document.createElement('button');
                 b.className = 'fb'; 
                 b.textContent = ind;
                 b.onclick = (e) => filter(ind, e.target); 
                 bar.appendChild(b);
-            });
-        }
+            }
+        });
+    }
 
-        function filter(v, btn) {
-            AF = v;
-            document.querySelectorAll('.fb').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            render(v === 'All' ? DATA : DATA.filter(p => p.industry === v));
-        }
+    function filter(v, btn) {
+        AF = v;
+        document.querySelectorAll('.fb').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        render(v === 'All' ? DATA : DATA.filter(p => p.industry === v));
+    }
 
-function render(list) {
-    document.getElementById('ct').textContent = DATA.length;
-    document.getElementById('cs').textContent = list.length;
-    const g = document.getElementById('portfolio-grid');
-    
-    g.innerHTML = list.map((p, i) => {
-        const hasImage = p.imageUrl && p.imageUrl.trim() !== '';
+    function refresh() { 
+        buildFilters(); 
+        render(AF === 'All' ? DATA : DATA.filter(p => p.industry === AF)); 
+    }
+
+    // 4. Rendering Logic
+    function render(list) {
+        document.getElementById('ct').textContent = DATA.length;
+        document.getElementById('cs').textContent = list.length;
+        const g = document.getElementById('portfolio-grid');
         
-        return `
-            <div class="portfolio-card" 
-                 onclick="window.open('${p.dashboardUrl}', '_blank')">
-                
-                <div class="card-header">
-                    <span class="industry-badge">${p.industry}</span>
-                    <div class="image-container" style="height:100%;">
-                        ${hasImage 
-                            ? `<img src="${p.imageUrl}" alt="${p.title}" onerror="this.style.display='none';">`
-                            : `<div style="width:100%; height:100%; background:#f3f4f6;"></div>`}
-                    </div>
-                </div>
+        if (!list.length) {
+            g.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:100px;">No projects found.</div>';
+            return;
+        }
 
-                <div class="portfolio-info">
-                    <h3>${p.title}</h3>
-                    <p class="description">${p.description}</p>
-                    <div class="open-btn">Open</div>
-                </div>
-            </div>`;
-    }).join('');
-}
-</body>
+        g.innerHTML = list.map((p, i) => {
+            const hasImage = p.imageUrl && p.imageUrl.trim() !== '';
+            
+            return `
+                <div class="portfolio-card" onclick="window.open('${p.dashboardUrl}', '_blank')">
+                    <div class="card-header">
+                        <span class="industry-badge">${p.industry}</span>
+                        <div class="image-container" style="height:100%;">
+                            ${hasImage 
+                                ? `<img src="${p.imageUrl}" alt="${p.title}" onerror="this.src='https://via.placeholder.com/400x200?text=Preview+Coming+Soon'">`
+                                : `<div style="width:100%; height:100%; background:#f3f4f6;"></div>`}
+                        </div>
+                    </div>
+
+                    <div class="portfolio-info">
+                        <h3>${p.title}</h3>
+                        <p class="description">${p.description}</p>
+                        <div class="open-btn" onclick="event.stopPropagation(); window.open('${p.dashboardUrl}', '_blank')">
+                            Open Dashboard
+                        </div>
+                    </div>
+                </div>`;
+        }).join('');
+    }
+
+    // Initialize
+    loadDataFromSheet();
+</script>
+</body>    
 </html>
