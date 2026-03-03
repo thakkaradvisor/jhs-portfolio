@@ -27,32 +27,33 @@
             </div>
     </div>
 
-    <script>
-    // 1. Configuration
-    const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqp9gms0RGShThKaCK-raQCbciyNSTi94uSthfKyZXeir3TZE9q4bStringXjp9i0S0vmZSkaiTdRkSEx9Xs/pub?gid=0&single=true&output=csv";
+<script>
+    // 1. DATA LOADING CONFIGURATION
+    // Use the specific CSV link for your sheet
+    const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNa65Z_LhorOp6gdsFWQ4oIJb6MoyFyFAoEv92doWMHpRkrCZIbB4tGCHamC2LMMMV0gfze9EYOR2G/pub?gid=0&single=true&output=csv";
     let DATA = [];
     let AF = 'All';
 
-    // 2. Data Loading
     async function loadDataFromSheet() {
         try {
             const response = await fetch(sheetUrl);
             const csvData = await response.text();
+            // Split by rows and skip the header
             const rows = csvData.split('\n').slice(1); 
 
             DATA = rows.map(row => {
-                // Regex to handle commas inside quoted descriptions
+                // This regex handles commas correctly if they are inside double quotes in your descriptions
                 const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 
-                // Maps to your 5 columns: Title(0), Industry(1), Description(2), DashURL(3), ImageURL(4)
+                // Matches your 5-column layout: Title(0), Industry(1), Description(2), DashURL(3), ImageURL(4)
                 if (cols.length < 5) return null;
 
                 return {
                     title: cols[0]?.replace(/"/g, '').trim(),
                     industry: cols[1]?.replace(/"/g, '').trim(),
                     description: cols[2]?.replace(/"/g, '').trim(),
-                    dashboardUrl: cols[3]?.replace(/"/g, '').trim(), // Column D
-                    imageUrl: cols[4]?.replace(/"/g, '').trim()    // Column E
+                    dashboardUrl: cols[3]?.replace(/"/g, '').trim(), // Index 3: Dashboard URL
+                    imageUrl: cols[4]?.replace(/"/g, '').trim()    // Index 4: Image URL
                 };
             }).filter(p => p !== null && p.title !== "");
 
@@ -60,20 +61,21 @@
         } catch (error) {
             console.error("Fetch Error:", error);
             document.getElementById('portfolio-grid').innerHTML = 
-                '<div style="grid-column:1/-1;text-align:center;padding:100px;">Error loading data. Please check your connection.</div>';
+                '<div style="grid-column:1/-1;text-align:center;padding:100px;">Error connecting to Google Sheets.</div>';
         }
     }
 
-    // 3. Filtering & Helpers
+    // 2. FILTERING LOGIC
     function buildFilters() {
         const bar = document.getElementById('filters-container');
         if (!bar) return;
 
-        // Reset bar with 'All' button
+        // Reset the bar with the 'All' button
         bar.innerHTML = '<span class="fl">Filter:</span><button class="fb active" onclick="filter(\'All\', this)">All</button>';
         
-        // Get unique industries and create buttons
-        [...new Set(DATA.map(p => p.industry))].forEach(ind => {
+        // Dynamically create buttons for every unique industry in your sheet
+        const industries = [...new Set(DATA.map(p => p.industry))];
+        industries.forEach(ind => {
             if(ind) {
                 const b = document.createElement('button');
                 b.className = 'fb'; 
@@ -96,10 +98,14 @@
         render(AF === 'All' ? DATA : DATA.filter(p => p.industry === AF)); 
     }
 
-    // 4. Rendering Logic
+    // 3. RENDERING LOGIC
     function render(list) {
-        document.getElementById('ct').textContent = DATA.length;
-        document.getElementById('cs').textContent = list.length;
+        // Update project counters
+        const ctElem = document.getElementById('ct');
+        const csElem = document.getElementById('cs');
+        if (ctElem) ctElem.textContent = DATA.length;
+        if (csElem) csElem.textContent = list.length;
+        
         const g = document.getElementById('portfolio-grid');
         
         if (!list.length) {
@@ -107,33 +113,27 @@
             return;
         }
 
-        g.innerHTML = list.map((p, i) => {
-            const hasImage = p.imageUrl && p.imageUrl.trim() !== '';
-            
-            return `
-                <div class="portfolio-card" onclick="window.open('${p.dashboardUrl}', '_blank')">
-                    <div class="card-header">
-                        <span class="industry-badge">${p.industry}</span>
-                        <div class="image-container" style="height:100%;">
-                            ${hasImage 
-                                ? `<img src="${p.imageUrl}" alt="${p.title}" onerror="this.src='https://via.placeholder.com/400x200?text=Preview+Coming+Soon'">`
-                                : `<div style="width:100%; height:100%; background:#f3f4f6;"></div>`}
-                        </div>
+        g.innerHTML = list.map((p, i) => `
+            <div class="portfolio-card" onclick="window.open('${p.dashboardUrl}', '_blank')">
+                <div class="card-header">
+                    <span class="industry-badge">${p.industry}</span>
+                    <div class="image-container" style="height:100%;">
+                        <img src="${p.imageUrl}" alt="${p.title}" onerror="this.src='https://via.placeholder.com/400x200?text=Preview+Loading...'">
                     </div>
+                </div>
 
-                    <div class="portfolio-info">
-                        <h3>${p.title}</h3>
-                        <p class="description">${p.description}</p>
-                        <div class="open-btn" onclick="event.stopPropagation(); window.open('${p.dashboardUrl}', '_blank')">
-                            Open Dashboard
-                        </div>
+                <div class="portfolio-info">
+                    <h3>${p.title}</h3>
+                    <p class="description">${p.description}</p>
+                    <div class="open-btn" onclick="event.stopPropagation(); window.open('${p.dashboardUrl}', '_blank')">
+                        Open Dashboard
                     </div>
-                </div>`;
-        }).join('');
+                </div>
+            </div>`).join('');
     }
 
-    // Initialize
+    // Initialize the load
     loadDataFromSheet();
 </script>
-</body>    
+</body>
 </html>
