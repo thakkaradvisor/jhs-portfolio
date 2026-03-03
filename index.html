@@ -98,53 +98,36 @@
             render(v === 'All' ? DATA : DATA.filter(p => p.industry === v));
         }
 
-        // 4. Core Render - Fixed Height & Direct Click
-        function render(list) {
-            document.getElementById('ct').textContent = DATA.length;
-            document.getElementById('cs').textContent = list.length;
-            const g = document.getElementById('portfolio-grid');
-            
-            if (!list.length) {
-                g.innerHTML = '<div style="grid-column:span 3;text-align:center;padding:80px;color:#6B6B6B">No projects found.</div>';
-                return;
-            }
-
-            g.innerHTML = list.map((p, i) => {
-                const c = gc(p.industry);
-                const hasImage = p.imageUrl && p.imageUrl.trim() !== '';
+function render(list) {
+    document.getElementById('ct').textContent = DATA.length;
+    document.getElementById('cs').textContent = list.length;
+    const g = document.getElementById('portfolio-grid');
+    
+    g.innerHTML = list.map((p, i) => {
+        const c = gc(p.industry);
+        const hasImage = p.imageUrl && p.imageUrl.trim() !== '';
+        
+        return `
+            <div class="portfolio-card" 
+                 style="animation: fadeInUp 0.5s ease forwards; animation-delay: ${i * 0.05}s; opacity: 0;" 
+                 onclick="window.open('${p.dashboardUrl}', '_blank')">
                 
-                return `
-                    <div class="portfolio-card" 
-                         style="animation: fadeInUp 0.5s ease forwards; animation-delay: ${i * 0.05}s; opacity: 0;" 
-                         onclick="window.open('${p.dashboardUrl}', '_blank')">
-                        
-                        <div class="card-header">
-                            <span class="industry-badge" style="background-color: ${c.bg};">${p.industry}</span>
-                            <div class="image-container">
-                                ${hasImage 
-                                    ? `<img src="${p.imageUrl}" alt="${p.title}" onerror="this.style.display='none'; this.parentElement.style.background='${c.bg}20'">`
-                                    : `<div style="width:100%; height:100%; background:${c.bg}15;"></div>`}
-                            </div>
-                        </div>
+                <div class="card-header">
+                    <span class="industry-badge" style="background-color: ${c.bg};">${p.industry}</span>
+                    <div class="image-container" style="height:100%;">
+                        ${hasImage 
+                            ? `<img src="${p.imageUrl}" alt="${p.title}" onerror="this.style.display='none'; this.parentElement.style.background='${c.bg}20'">`
+                            : `<div style="width:100%; height:100%; background:${c.bg}15;"></div>`}
+                    </div>
+                </div>
 
-                        <div class="portfolio-info">
-                            <h3>${p.title}</h3>
-                            <p class="description">${p.description}</p>
-                            <div class="feature-tags">
-                                ${p.features.slice(0, 2).map(f => `<span>${f}</span>`).join('')}
-                            </div>
-                        </div>
-                    </div>`;
-            }).join('');
-        }
-
-        function refresh() { 
-            buildFilters(); 
-            render(AF === 'All' ? DATA : DATA.filter(p => p.industry === AF)); 
-        }
-
-        // Initial Load
-        loadDataFromSheet();
-    </script>
+                <div class="portfolio-info">
+                    <h3>${p.title}</h3>
+                    <p class="description">${p.description}</p>
+                    <div class="open-btn">Open</div>
+                </div>
+            </div>`;
+    }).join('');
+}
 </body>
 </html>
