@@ -13,8 +13,10 @@
     --text: #111827;
     --muted: #6B7280;
     --border: #E5E7EB;
-    /* Changed accent from Blue to a Sophisticated Dark Grey */
-    --accent: #6B7280; 
+    /* Neutral Theme Palette */
+    --accent-grey: #9CA3AF; 
+    --dark-blue: #1e3a8a; /* Professional Dark Blue for Industry Badges */
+    --maroon: #800000;    /* Professional Maroon-Red for the button */
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
@@ -34,15 +36,6 @@ body {
 .page-header { 
     text-align: center; 
     margin-bottom: 50px; 
-}
-
-.eyebrow {
-    font-size: .75rem;
-    font-weight: 700;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: var(--muted); /* Neutralized */
-    margin-bottom: 12px;
 }
 
 .title {
@@ -75,9 +68,8 @@ body {
     transition: all 0.3s ease;
 }
 
-/* Filter Hover: Soft Grey */
 .fb:hover {
-    border-color: #9CA3AF;
+    border-color: var(--accent-grey);
     color: #111;
     background: #F9FAFB;
 }
@@ -97,7 +89,7 @@ body {
     justify-content: center;
 }
 
-/* 5. THE PREMIUM LOCKED CARD */
+/* 5. THE PREMIUM LOCKED CARD (450px Height) */
 .portfolio-card {
     background: #ffffff !important;
     border-radius: 16px;
@@ -108,7 +100,7 @@ body {
     
     width: 100%;
     max-width: 380px; 
-    height: 450px; /* Locked Height */
+    height: 450px; /* Locked Height for every dashboard */
     
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     box-shadow: var(--shadow-sm);
@@ -116,11 +108,11 @@ body {
     position: relative;
 }
 
-/* NEW HOVER STATE: Deep Grey & Lift */
+/* Grey Hover State */
 .portfolio-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 20px 30px rgba(0, 0, 0, 0.08);
-    border-color: #9CA3AF; /* Subtle Grey Border */
+    border-color: var(--accent-grey);
 }
 
 /* 6. IMAGE AREA */
@@ -145,11 +137,13 @@ body {
     transform: scale(1.05); 
 }
 
+/* Forced Dark Blue Badges */
 .industry-badge {
     position: absolute;
     top: 16px; 
     left: 16px;
     color: white;
+    background-color: var(--dark-blue) !important;
     padding: 6px 14px;
     border-radius: 10px;
     font-size: .65rem;
@@ -157,6 +151,7 @@ body {
     z-index: 10;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
 /* 7. CONTENT AREA */
@@ -186,38 +181,33 @@ body {
     line-height: 1.6;
     margin-bottom: 20px;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 4; /* Increased clamp since features are gone */
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
 
-/* 8. TAGS - Pinned to bottom */
-.feature-tags {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-top: auto; 
-}
-
-.feature-tags span {
-    background: #F3F4F6;
-    color: #4B5563;
+/* 8. MAROON "OPEN" BUTTON */
+.open-btn {
+    margin-top: auto; /* Pushes button to bottom of the 450px card */
+    align-self: flex-start;
+    background: var(--maroon);
+    color: white;
+    padding: 8px 24px;
+    border-radius: 8px;
+    font-size: 0.85rem;
     font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: .7rem;
-    border: 1px solid transparent;
-    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: background 0.3s ease, transform 0.2s ease;
 }
 
-/* Tag Hover Effect */
-.portfolio-card:hover .feature-tags span {
-    background: #fff;
-    border-color: #D1D5DB;
+.portfolio-card:hover .open-btn {
+    background: #a00000; /* Subtle hover color change */
+    transform: scale(1.03);
 }
 
-/* 9. CLEANUP */
-.ov, .view-link, hr { 
+/* 9. CLEANUP (Hidden features as requested) */
+.feature-tags, .ov, .view-link, hr { 
     display: none !important; 
 }
 
