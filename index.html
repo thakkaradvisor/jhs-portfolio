@@ -11,7 +11,7 @@
 
     <div class="container">
         <div class="page-header">
-            <div class="eyebrow">⚡ Power BI Analytics</div>
+            <div class="eyebrow">⚡JHS Analytics Analytics</div>
             <h1 class="title">Featured Projects</h1>
             <div style="text-align:center; margin-bottom: 20px;">
                 <span class="count-badge">Showing <span id="cs">0</span> of <span id="ct">0</span> projects</span>
@@ -53,15 +53,14 @@
 
                 DATA = rows.map(row => {
                     const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                    if (cols.length < 6) return null;
+                    if (cols.length < 5) return null;
 
                     return {
                         title: cols[0].replace(/"/g, '').trim(),
                         industry: cols[1].replace(/"/g, '').trim(),
                         description: cols[2].replace(/"/g, '').trim(),
-                        features: cols[3].replace(/"/g, '').split('|').map(f => f.trim()),
-                        dashboardUrl: cols[4].replace(/"/g, '').trim(),
-                        imageUrl: cols[5].replace(/"/g, '').trim()
+                        dashboardUrl: cols[3].replace(/"/g, '').trim(),
+                        imageUrl: cols[4].replace(/"/g, '').trim()
                     };
                 }).filter(p => p !== null);
 
