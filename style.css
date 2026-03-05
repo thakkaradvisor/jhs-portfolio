@@ -17,7 +17,7 @@
 }
 
 body {
-    background-color: var(--bg);
+    background-color: #ffffff;
     font-family: var(--framer-font-family);
     color: var(--text);
     padding: 20px;
