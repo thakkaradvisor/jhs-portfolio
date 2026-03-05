@@ -27,7 +27,7 @@ body {
 
 /* HEADER */
 .page-header { text-align: center; padding: 20px 20px 10px; margin-top: 0; }
-.eyebrow { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; font-family: var(--framer-font-family);gap: 6px;margin-top:12px; display: flex;  }
+.eyebrow { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; font-family: var(--framer-font-family);gap: 6px; margin-top:0px; display: flex;  }
 /* Specific Logo Sizing */
 .nav-logo {
     height: 50px;    /* Reduced from 32px for a more subtle, high-end look */
@@ -35,7 +35,7 @@ body {
     padding: 0;      /* Ensures no internal padding is pushing space */
     margin: 0;
 }
-.title { font-family: var(--framer-font-family-bold); font-size: 3.5 rem; font:50px; margin-bottom: 24px; color: #111;letter-spacing: 0.06em; margin-top:0px; font-weight: 1200;}
+.title { font-family: var(--framer-font-family-bold); font-size: 3.5 rem; font:50px; margin-bottom: 24px; color: #111;letter-spacing: 0.06em; margin-top:0; font-weight: 1200;}
 .count-badge { background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 6px 16px; font-size: 0.82rem; color: var(--muted); font-weight: 500; font-family: var(--framer-font-family); }
 
 /* FILTERS */
