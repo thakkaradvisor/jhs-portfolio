@@ -76,7 +76,7 @@ body {
     cursor: pointer;
     animation: fadeInUp 0.4s ease both;
 }
-.portfolio-card:hover { transform: translateY(-6px); box-shadow: 0 16px 36px rgba(0,0,0,0.11); border-color: ; }
+.portfolio-card:hover { transform: translateY(-6px); box-shadow: 0 16px 36px rgba(0,0,0,0.11); border-color:#F9FAFB ; }
 
 /* IMAGE */
 .card-header { height: 185px; width: 100%; overflow: hidden; background: #f3f4f6; position: relative; flex-shrink: 0; }
