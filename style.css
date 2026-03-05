@@ -23,7 +23,7 @@ body {
     padding: 20px;
 }
 
-.container { max-width: 1200px; margin: 0 auto; margin-top:2px !important; }
+.container { max-width: 1200px; margin: 0 auto; margin-top:0px !important; }
 
 /* HEADER */
 .page-header {width : 100%; padding-top: 0px; padding-bottom: 10px; margin: 0; text-align: center; }
