@@ -30,7 +30,7 @@ body {
 .eyebrow { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; font-family: var(--framer-font-family);gap: 6px;margin-top:12px; display: flex;  }
 /* Specific Logo Sizing */
 .nav-logo {
-    height: 35px;    /* Reduced from 32px for a more subtle, high-end look */
+    height: 50px;    /* Reduced from 32px for a more subtle, high-end look */
     width: auto;     /* Maintains aspect ratio */
     padding: 0;      /* Ensures no internal padding is pushing space */
     margin: 0;
