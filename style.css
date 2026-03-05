@@ -28,7 +28,7 @@ body {
 
 /* HEADER */
 .page-header {width : 100%; padding-top: 0px; padding-bottom: 0px; margin: 0; text-align: center; }
-.eyebrow { margin-bottom: 4px; gap: 4px; margin-top:0px; display: flex! important; justify-content:center; align-items:center;}
+.eyebrow { margin-bottom: 0px; gap: 4px; margin-top:0px; display: flex! important; justify-content:center; align-items:center;}
 /* Specific Logo Sizing */
 .nav-logo {
     height: 80px;    /* Reduced from 32px for a more subtle, high-end look */
