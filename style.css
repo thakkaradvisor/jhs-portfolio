@@ -66,7 +66,7 @@ body {
 .portfolio-card {
     background: #ffffff;
     border-radius: 16px;
-    border: 30px solid transparent;
+    border: 5px solid transparent;
     overflow: hidden;
     display: flex;
     flex-direction: column;
