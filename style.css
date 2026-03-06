@@ -145,7 +145,7 @@ body {
     padding: 10px 0; /* Vertical breathing room at the bottom */
     text-align: center;
     border-top: 1px solid #eeeeee; /* Subtle line to separate from project cards */
-    margin-top: 10px;
+    margin-top: 20px;
   }
 
 .main-footer p {
