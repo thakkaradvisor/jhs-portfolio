@@ -41,7 +41,7 @@ body {
 .title { font-family: var(--framer-font-family-bold); font-size: 3.5 rem; font-weight: 1500; margin-bottom: 24px; color: #111;letter-spacing: 0.04em; margin-top:-18px; padding-top:0px !important;}
 
 /* FILTERS */
-.filters-bar { display: flex; justify-content: center; align-items: center; gap: 5px; flex-wrap: wrap; margin: 0 auto 60px auto; max-width: 1000px; padding-bottom: 5px;}
+.filters-bar { display: flex; justify-content: center; align-items: center; gap: 5px; flex-wrap: wrap; margin: 0 auto 60px auto; max-width: 1000px; padding-bottom: 0 !important;}
 .fl { font-size: 0.75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-family: var(--framer-font-family); }
 .fb {
     padding: 10px 22px; border-radius: 50px;
@@ -61,8 +61,8 @@ body {
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
     align-items: stretch;   /* all cards same height in each row */
-    margin-top: 5px !important;
-    padding-top:0px;
+    margin-top: 0 !important;
+    padding-top: 10px !important;
 }
 
 /* CARD — fixed uniform height */
