@@ -146,9 +146,7 @@ body {
     text-align: center;
     border-top: 1px solid #eeeeee; /* Subtle line to separate from project cards */
     margin-top: 50px;
-    margin-left: -50vw;
-    margin-right: -50vw;
-}
+  }
 
 .main-footer p {
     font-family: 'Public Sans', sans-serif;
