@@ -130,38 +130,54 @@ body {
     position: relative;
     z-index:5;
 }
-/* 3. The Classy Floating Popup */
+/* 3. THE CLASSY FLOATING CARD */
 .description::after {
-    content: attr(data-fulltext); /* Pulls from your Google Sheet */
+    content: attr(data-fulltext);
     position: absolute;
-    bottom: 110%; /* Floats ABOVE the text area to keep the button clear */
+    bottom: 130%; /* Floats above the card */
     left: 50%;
     transform: translateX(-50%) translateY(10px);
-    
-    width: 300px;
-    padding: 20px;
+    width: 280px;
+    padding: 18px;
     background: #ffffff;
     color: var(--text);
     border-radius: 12px;
-    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2); /* Deep shadow for 3D effect */
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15); /* Classy shadow */
     border: 1px solid var(--border);
     z-index: 9999;
     
-    /* Animation & Anti-Blink */
+    /* Animation & Anti-Flicker */
     opacity: 0;
     visibility: hidden;
     pointer-events: none; 
-    transition: all 0.3s ease-out;
+    transition: all 0.3s ease;
     
-    /* Internal Text Styling */
+    /* Text Styles */
     font-size: 0.85rem;
-    line-height: 1.6;
-    display: block; 
-    white-space: normal; /* Ensures text wraps naturally */
+    line-height: 1.5;
+    display: block;
+    white-space: normal;
 }
 
-/* 4. Trigger ONLY on description hover */
-.description:hover::after {
+/* 4. THE SMALL POINTER TRIANGLE */
+.description::before {
+    content: '';
+    position: absolute;
+    bottom: 115%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    border-width: 8px 8px 0 8px;
+    border-style: solid;
+    border-color: #ffffff transparent transparent transparent;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+/* 5. TRIGGER BOTH ON HOVER */
+.description:hover::after,
+.description:hover::before {
     opacity: 1;
     visibility: visible;
     transform: translateX(-50%) translateY(0);
