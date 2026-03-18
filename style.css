@@ -162,8 +162,8 @@ body {
     line-height: 1.5;
     white-space: normal;
     pointer-events: none;
-    top: -5px; 
-    left: -10px;
+    top: -4px; 
+    left: -5px;
     width: calc(100% + 20px);
 }
 .desc-container::before {
