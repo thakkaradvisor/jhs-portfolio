@@ -136,7 +136,9 @@
                     </div>
                     <div class="portfolio-info">
                         <h3>${p.title}</h3>
-                        <p class="description" data-fulltext="${p.description}">${p.description}</p>
+                       <div class="desc-container" data-fulltext="${p.description}">
+                        <p class="description">${p.description}</p>
+                        </div>
                         <div class="open-btn" style="background:${THEME}">View Dashboard →</div>
                     </div>
                 </div>`;
