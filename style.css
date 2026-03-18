@@ -102,6 +102,7 @@ body {
     flex-direction: column;
     flex: 1;
     overflow: hidden;
+    position: relative;
 }
 .portfolio-info h3 {
     text-align : left !important;
@@ -124,7 +125,7 @@ body {
     flex: 1;
     font-family: var(--framer-font-family);
     text-align: justify;
-    text-justify: inter-word
+    text-justify: inter-word;
 }
 
 /* BUTTON — always pinned to bottom */
@@ -139,7 +140,7 @@ body {
     flex-shrink: 0;
     font-family: var(--framer-font-family-bold);
 }
-.open-btn:hover { opacity: 0.85; }
+.open-btn:hover { opacity: 0.85;z-index: 1; }
 
 .main-footer {
     width: 100%;
