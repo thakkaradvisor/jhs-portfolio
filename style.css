@@ -128,27 +128,40 @@ body {
     text-justify: inter-word;
     transition: all 0.3s ease;
     position: relative;
-    cursor: help; /* Visual cue that there is more to read */
     z-index: 5;
+    cursor: help; /* Visual cue that there is more to read */
 }
-/* 2. The "Popup" behavior on hover */
+/* 2. The Fixed Popup (Anti-Blink) */
+.description:hover::after {
+    content: "";
+    display: block;
+    position: absolute;
+    /* This invisible bridge prevents the 'blinking' by keeping the hover active */
+    top: -100px; 
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 99;
+}
+
 .description:hover {
-    display: block;          /* Removes the -webkit-line-clamp limit */
-    overflow: visible;       /* Shows full text from your Google Sheet */
-    position: absolute;      /* FLOATS above the card */
-    
-    /* Styling the Popup */
+    display: block;          
+    overflow: visible;       
+    position: absolute;      
     background: #ffffff;
-    width: calc(100% + 20px); /* Slightly wider than the text area for padding */
-    left: -10px;             /* Centers the slightly wider box */
+    width: calc(100% + 20px); 
+    left: -10px;             
     padding: 15px;
     border: 1px solid var(--border);
     border-radius: 8px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.18);
     
-    /* POSITIONING UPWARDS to keep the button visible */
-    bottom: 110%;            /* Forces the popup to appear ABOVE the text area */
-    z-index: 100;            /* Ensures it sits on top of all other elements */
+    /* Positioned UPWARDS to keep the View Dashboard button clear */
+    bottom: 115%;            
+    z-index: 100;
+    
+    /* Prevents the popup itself from triggering new hover events that cause blinking */
+    pointer-events: none; 
 }
 /* BUTTON — always pinned to bottom */
 .open-btn {
